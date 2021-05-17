@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "i4ynMwcnhWKoMLMg/D4vvQUcrt+a50VePNDgZscew9SybkdyUDY6YlJ9dfj7D9Q0ks6wmxFponW61I4iyMeY7w==",
+  "dgSpecHash": "+2oeXXxIbNU6jVvo/DB0q/3eltu7ahAEeq1dxw13P0KKSxBG9ZHMt1yGlTrvD+9XNpe1vlqpSyhAZMz1qVPzEw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Cuki\\source\\repos\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+  "projectFilePath": "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Cuki\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.12\\microsoft.aspnetcore.cryptography.internal.3.1.12.nupkg.sha512",
     "C:\\Users\\Cuki\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\3.1.12\\microsoft.aspnetcore.cryptography.keyderivation.3.1.12.nupkg.sha512",

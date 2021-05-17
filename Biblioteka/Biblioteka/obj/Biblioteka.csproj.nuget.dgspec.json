@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Cuki\\source\\repos\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {}
+    "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Cuki\\source\\repos\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {
+    "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Cuki\\source\\repos\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+        "projectUniqueName": "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
         "projectName": "Biblioteka",
-        "projectPath": "C:\\Users\\Cuki\\source\\repos\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+        "projectPath": "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
         "packagesPath": "C:\\Users\\Cuki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Cuki\\source\\repos\\Biblioteka\\Biblioteka\\obj\\",
+        "outputPath": "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Cuki\\AppData\\Roaming\\NuGet\\NuGet.Config",

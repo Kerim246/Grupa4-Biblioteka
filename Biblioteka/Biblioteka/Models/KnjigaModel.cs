@@ -11,23 +11,23 @@ namespace Biblioteka.Models
         public enum Zanr { Fantazija, Horror, Historija, Triler, SciFi, Romansa, Akcija, Misterija, Drama };
         public enum Ocjena { Jedan, Dva, Tri, Cetiri, Pet };
         public enum Jezik { Bosanski, Engleski, Fransuki, Njemacki, Spanski };
-        public string naslov { get; set; }
-        public string autor { get; set; }
-        public int broj_stranica { get; set; }
+        private string naslov { get; set; }
+        private string autor { get; set; }
+        private int broj_stranica { get; set; }
 
-        public List<Zanr> zanrovi { get; set; }
+        private List<Zanr> zanrovi { get; set; }
 
-        public List<Jezik> jezici { get; set; }
+        private List<Jezik> jezici { get; set; }
 
         private DateTime datum_izdavanja { get; set; }
 
-        public int koolicina { get; set; }
+        private int koolicina { get; set; }
 
-        public List<string> komentari { get; set; }
+        private List<string> komentari { get; set; }
 
-        public string opis { get; set; }
+        private string opis { get; set; }
 
-        public Ocjena ocj { get; set; }
+        private Ocjena ocj { get; set; }
         
     }
 }

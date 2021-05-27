@@ -5698,19 +5698,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Cuki\\.nuget\\packages\\": {}
+    "C:\\Users\\Kerim\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+      "projectUniqueName": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
       "projectName": "Biblioteka",
-      "projectPath": "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
-      "packagesPath": "C:\\Users\\Cuki\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Cuki\\Documents\\GitHub\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\obj\\",
+      "projectPath": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+      "packagesPath": "C:\\Users\\Kerim\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Cuki\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Kerim\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5775,7 +5775,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }

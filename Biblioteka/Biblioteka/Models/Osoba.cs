@@ -1,23 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Biblioteka.Models
 {
-    public class OsobaModel
+    [Table("Osoba")]
+    public class Osoba
     {
-        private string ime { get; set; }
-        
-        private string prezime { get; set; }
+        [Key]
+        [Required]
+        public int Id { get; set; }
 
-        private long broj_telefona { get; set; }
+        [Required]
+        public string ime { get; set; }
 
-        private string email { get; set; }
+        [Required]
+        public string prezime { get; set; }
+        [Required]
+        public long broj_telefona { get; set; }
 
-        private string username { get; set; }
-
-        private string sifra { get; set; }
+        [Required]
+        public string email { get; set; }
+        [Required]
+        public string username { get; set; }
+        [Required]
+        public string sifra { get; set; }
 
     }
+
+    [Table("Administrator")]
+    public class Administrator : Osoba
+    {
+        [ForeignKey("Osoba")]
+        [Required]
+
+        public int id { get; set; }
+    }
+
+    [Table("Bibliotekar")]
+    public class Bibliotekar : Osoba
+    {
+        [ForeignKey("Osoba")]
+        [Required]
+        public int id { get; set; }
+
+        [ForeignKey("BibliotekaM")]
+        [Required]
+        public int biblioteka_id { get; set; }
+    } 
 }

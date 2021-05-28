@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Biblioteka.Models
 {
    
-    public class KnjigaModel
+    public class Knjiga
     {
         public enum Zanr { Fantazija, Horror, Historija, Triler, SciFi, Romansa, Akcija, Misterija, Drama };
         public enum Ocjena { Jedan, Dva, Tri, Cetiri, Pet };
         public enum Jezik { Bosanski, Engleski, Fransuki, Njemacki, Spanski };
+
+        [Key]
+        [Required]
+        public int id { get; set; }
+        [Required]
         private string naslov { get; set; }
+        [Required]
         private string autor { get; set; }
+        [Required]
         private int broj_stranica { get; set; }
 
-        private List<Zanr> zanrovi { get; set; }
-
-        private List<Jezik> jezici { get; set; }
-
+        [Required]
         private DateTime datum_izdavanja { get; set; }
 
-        private int koolicina { get; set; }
+        [Required]
+        private int kolicina { get; set; }
 
-        private List<string> komentari { get; set; }
-
+        [Required]
         private string opis { get; set; }
-
-        private Ocjena ocj { get; set; }
         
     }
 }

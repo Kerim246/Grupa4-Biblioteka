@@ -13,14 +13,16 @@ namespace Biblioteka.Models
         [ForeignKey("Osoba")]
         [Required]
         public int Id { get; set; }
-        [Required]
-        public List<Knjiga> pozajmljene_knjige { get; set; }
 
         [Required]
-        private long broj_ziror_acuna { get; set; }
+        public long broj_ziror_acuna { get; set; }
+
+        [ForeignKey("BibliotekaM")]
+        [Required]
+        public int biblioteka_id { get; set; }
 
         [Required]
-        private DateTime datum_isteka_clanarine { get; set; }
+        public DateTime datum_isteka_clanarine { get; set; }
 
 
     }

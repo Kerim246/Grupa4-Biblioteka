@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Biblioteka.Models
 {
-    public class Korisnik : Osoba
+    public class Korisnik
     {
 
         [ForeignKey("Osoba")]
         [Required]
-        public int Id { get; set; }
+        public int korisnik_id { get; set; }
 
         [Required]
         public long broj_ziror_acuna { get; set; }
@@ -21,9 +21,9 @@ namespace Biblioteka.Models
         [Required]
         public int biblioteka_id { get; set; }
 
-        [Required]
+        [Required, DataType(DataType.DateTime)]
         public DateTime datum_isteka_clanarine { get; set; }
 
 
-    }
+    } 
 }

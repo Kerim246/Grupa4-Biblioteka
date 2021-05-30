@@ -18,10 +18,10 @@ namespace Biblioteka.Models
         [Required]
         public int korisnik_id { get; set; }
 
-        [Required]
+        [Required, DataType(DataType.DateTime)]
         public DateTime datum_vracanja { get; set; }
 
-        [Required]
+        [Required, DataType(DataType.DateTime)]
         public DateTime datum_iznajmljivanja { get; set; }
 
     }

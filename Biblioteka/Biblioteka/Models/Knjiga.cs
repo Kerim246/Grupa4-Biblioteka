@@ -17,20 +17,20 @@ namespace Biblioteka.Models
         [Required]
         public int id { get; set; }
         [Required]
-        private string naslov { get; set; }
+        public string naslov { get; set; }
         [Required]
-        private string autor { get; set; }
+        public string autor { get; set; }
         [Required]
-        private int broj_stranica { get; set; }
+        public int broj_stranica { get; set; }
+
+        [Required, DataType(DataType.DateTime)]
+        public DateTime datum_izdavanja { get; set; }
 
         [Required]
-        private DateTime datum_izdavanja { get; set; }
+        public int kolicina { get; set; }
 
         [Required]
-        private int kolicina { get; set; }
-
-        [Required]
-        private string opis { get; set; }
+        public string opis { get; set; }
         
     }
 }

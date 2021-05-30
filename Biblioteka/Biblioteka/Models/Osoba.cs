@@ -12,7 +12,7 @@ namespace Biblioteka.Models
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [Required]
         public string ime { get; set; }
@@ -30,25 +30,4 @@ namespace Biblioteka.Models
         public string sifra { get; set; }
 
     }
-
-    [Table("Administrator")]
-    public class Administrator : Osoba
-    {
-        [ForeignKey("Osoba")]
-        [Required]
-
-        public int id { get; set; }
-    }
-
-    [Table("Bibliotekar")]
-    public class Bibliotekar : Osoba
-    {
-        [ForeignKey("Osoba")]
-        [Required]
-        public int id { get; set; }
-
-        [ForeignKey("BibliotekaM")]
-        [Required]
-        public int biblioteka_id { get; set; }
-    } 
 }

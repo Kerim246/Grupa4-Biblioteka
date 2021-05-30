@@ -12,10 +12,6 @@ namespace Biblioteka.Models
         [Required]
 
         public int id { get; set; }
-        public enum Grad { Sarajevo, Zenica, Tuzla, Mostar}
-
-        [Required]
-        public Grad grad { get; set; }
         
         [Required]
         public string adresa { get; set; }

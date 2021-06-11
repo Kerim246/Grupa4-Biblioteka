@@ -3,7 +3,8 @@
 ## Akteri:
 * Gost
 * Korisnik
-* Administrator/Bibliotekar
+* Bibliotekar
+* Administrator
 
 ## Funkcionalisti:
 
@@ -23,8 +24,11 @@
 * Pregled rang liste za ocijenjene knjige
 
 
-### Administrator/Bibliotekar:
+### Bibliotekar:
 
 * Mogućnost dodavanje novih, te brisanje i editovanje postojećih knjiga
 * Mogućnost iznajmljivanja knjige
 * Mogućnost dodavanje/brisanje/editovanje korisnickih racuna
+
+### Administrator:
+* Dodavanje novih, te editovanje i brisanje postojećih biblioteka, kao i bibliotekara za svaku biblioteku.

@@ -32,9 +32,6 @@ namespace Biblioteka.Models
         [DisplayName("Zanrovi: ")]
         public List<String> zanrovi { get; set; }
 
-        [DisplayName("Ocjena: ")]
-        public List<String> ocjene { get; set; }
-
         [DisplayName("Komentari: ")]
         public List<String> komentari { get; set; }
 

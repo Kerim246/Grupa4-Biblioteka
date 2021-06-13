@@ -11,6 +11,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace Biblioteka.Controllers
 {
@@ -18,7 +19,7 @@ namespace Biblioteka.Controllers
     {
         private readonly BibliotekaContext _context;
         private string _connectionString = @"Server=sql11.freesqldatabase.com;Port=3306;Database=sql11418771;User=sql11418771;Password=bKPA8lMKiq;";
-
+        public static int ajdi;
 
         public IConfiguration Configuration { get; }
 
@@ -27,64 +28,20 @@ namespace Biblioteka.Controllers
             _context = context;
         }
 
-        public ActionResult Ddl()
-        {
-            var segmentList = new List<ListSort>();
-            ListSort segmentItem;
-            var strArr = new string[] { "Jaipur", "Kota", "Bhilwara", "Udaipur", "Chitorgar", "Ajmer", "Jodhpur" };
-            for (int index = 0; index < strArr.Length; index++)
-            {
-                segmentItem = new ListSort();
-                segmentItem.kriterij = strArr[index];
-                segmentList.Add(segmentItem);
-            }
-            return View(segmentList);
-        }
-
-        [HttpPost]
-        public ActionResult ActionPostData(string Segmentation)
-        {
-            return RedirectToAction("Ddl");
-        }
 
         // GET: Knjige
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searching)
         {
-            string[] opcije = { "Cow", "Camel", "Elephant" };
-            List<String> options = new List<String>(opcije);
+            var knjige = from k in _context.Knjiga select k;
 
-
-            return View(await _context.Knjiga.ToListAsync());
-        }
-        /* Ideja za choicebox, izvucem selekotovani item i onda update Index fju na nacin da poredim ako je taj onda sortiraj tako i tako za svaki*/
-
-        /*
-        public async Task<IActionResult> Index(string kriterij)
-        {
-
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(kriterij) ? "name_desc" : "";
-            ViewData["DateSortParm"] = kriterij == "Date" ? "date_desc" : "Date";
-            var students = from s in _context.Knjiga
-                           select s;
-            switch (kriterij)
+            if (!String.IsNullOrEmpty(searching))
             {
-                case "name_desc":
-                    students = students.OrderByDescending(s => s.LastName);
-                    break;
-                case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
-                    break;
-                case "date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
-                    break;
-                default:
-                    students = students.OrderBy(s => s.LastName);
-                    break;
-            }
-            return View(await students.AsNoTracking().ToListAsync());
+                knjige = knjige.Where(k => k.naslov.Contains(searching) || k.autor.Contains(searching));
 
-            return View(await _context.Knjiga.ToListAsync());
-        } */
+            }
+
+            return View(await knjige.ToListAsync());
+        }
 
         // GET: Knjige/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -115,21 +72,40 @@ namespace Biblioteka.Controllers
 
             var str1 = "SELECT naziv from Zanr where knjiga_id=" + k.id;
             var str2 = "SELECT komentar from Komentar where knjiga_id=" + k.id;
-           // var idParamtear = new SqlParameter("@id", k.id);
+            // var idParamtear = new SqlParameter("@id", k.id);
             //var jezici = _context.Jezik.FromSql("SELECT naziv from Jezik where id = @id", idParamtear);
             //k.jezici = jezici;
-
 
             k.jezici = vratiListu(str);
             k.zanrovi = vratiListu(str1);
             k.komentari = vratiListu(str2);
 
+            ajdi = k.id;
        //     KnjigaPage k = new KnjigaPage(knjiga, vratiListu(str));
             //     k.zanrovi = vratiListu(str1,k.id);
             //    k.komentari = vratiListu(str2,k.id);
 
             return View(k);
         }
+        [HttpPost]
+        public ActionResult Update(string komentar="")
+        {
+
+            var cmd = "INSERT INTO Komentar(Knjiga_id,komentar) values (@Knjiga_id,@komentar)";
+
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+
+            MySqlCommand command = new MySqlCommand(cmd, connection);
+            command.Parameters.AddWithValue("@Knjiga_id", ajdi);
+            command.Parameters.AddWithValue("@komentar", komentar);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            return RedirectToAction("Index");
+
+        } 
 
         public List<String> vratiListu(String str)
         {
@@ -153,13 +129,33 @@ namespace Biblioteka.Controllers
                 foreach (var j in listaStr)
                 {
                     lista.Add(j);
-                    lista.Add(",");
+                    lista.Add("\n");
                 }
 
             lista.RemoveAt(lista.Count - 1);
                 return lista;
 
             
+        }
+
+        public ActionResult DodajIznajmljenu()
+        {
+            var cmd = "INSERT INTO IznajmljeneKnjige(knjiga_id,korisnik_id,datum_vracanja,datum_iznajmljivanja) values (@knjiga_id,@korisnik_id,@datum_vracanja,@datum_iznajmljivanja)";
+
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+
+            MySqlCommand command = new MySqlCommand(cmd, connection);
+            command.Parameters.AddWithValue("@Knjiga_id", ajdi);
+            command.Parameters.AddWithValue("@korisnik_id", 1);
+            command.Parameters.AddWithValue("@datum_iznajmljivanja", DateTime.Now);
+            command.Parameters.AddWithValue("@datum_vracanja", DateTime.Now.AddDays(30));
+
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Knjige/Create

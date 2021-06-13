@@ -11,6 +11,8 @@ namespace Biblioteka.Models
    
     public class Knjiga
     {
+
+        public Knjiga() { }
         public enum Zanr { Fantazija, Horror, Historija, Triler, SciFi, Romansa, Akcija, Misterija, Drama };
         public enum Ocjena { Jedan, Dva, Tri, Cetiri, Pet };
         public enum Jezik { Bosanski, Engleski, Fransuki, Njemacki, Spanski };

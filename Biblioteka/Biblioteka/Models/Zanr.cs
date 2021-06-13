@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace Biblioteka.Models
         public int knjiga_id { get; set; }
 
         [Required]
+        [DisplayName("Zanr")]
+
         public string naziv { get; set; }
 
     }

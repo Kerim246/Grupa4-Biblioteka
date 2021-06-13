@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,17 +23,34 @@ namespace Biblioteka.Models
         [Required]
         public string autor { get; set; }
         [Required]
+        [DisplayName("Broj stranica")]
+
         public int broj_stranica { get; set; }
 
         [Required, DataType(DataType.DateTime)]
+        [DisplayName("Datum izdavanja")]
+
         public DateTime datum_izdavanja { get; set; }
 
         [Required]
+        [DisplayName("Kolicina")]
+
         public int kolicina { get; set; }
 
         [Required]
+        [DisplayName("Opis:")]
         public string opis { get; set; }
         
+
+        public Knjiga(string naslov,string autor,int broj_stranica,DateTime datum_izdavanja,int kolicina,string opis)
+        {
+            this.naslov = naslov;
+            this.autor = autor;
+            this.broj_stranica = broj_stranica;
+            this.datum_izdavanja = datum_izdavanja;
+            this.kolicina = kolicina;
+            this.opis = opis;
+        }
     }
 }
 

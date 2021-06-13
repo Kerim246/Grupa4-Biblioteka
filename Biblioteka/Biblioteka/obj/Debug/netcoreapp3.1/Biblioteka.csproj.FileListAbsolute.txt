@@ -271,5 +271,4 @@ C:\Users\Kerim\Desktop\bzsc\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\ne
 C:\Users\Kerim\Desktop\bzsc\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\Details.cshtml.g.cs
 C:\Users\Kerim\Desktop\bzsc\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\Edit.cshtml.g.cs
 C:\Users\Kerim\Desktop\bzsc\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\Index.cshtml.g.cs
-C:\Users\Kerim-PC\Desktop\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.dll
-C:\Users\Kerim-PC\Desktop\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.pdb
+C:\Users\Kerim\Desktop\bzsc\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\Select.cshtml.g.cs

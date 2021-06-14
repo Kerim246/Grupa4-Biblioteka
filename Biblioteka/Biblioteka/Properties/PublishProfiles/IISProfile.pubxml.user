@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAI/4jtUGY/0SD7NXwKFXAXwAAAAACAAAAAAAQZgAAAAEAACAAAADi8UfKMSNk4PdvSdZ63CWslRmwoiEQXGK/T4fW+Xy0FAAAAAAOgAAAAAIAACAAAABiyb0AF/PViLbGRitH6+KJd6qMRTNJ8JX35LWCvW9liCAAAACm2BCHXljYNTwjCGIi/L2NP8rpvtiCqtXn8rv7esjLG0AAAAAJ2o1E2txbnQAIMuaZM+Wo4we1E632b+PThHvwtRmcvbGsZchLMhJ1rJqv6B9UUr5gOrzaO0kS7fWJPplqFrdI</EncryptedPassword>
+    <History>True|2021-06-14T11:40:04.9492207Z;False|2021-06-14T13:32:36.4920199+02:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="BibliotekaContext">
+      <Value>Server=sql11.freesqldatabase.com%3bPort=3306%3bDatabase=sql11418771%3bUser=sql11418771%3bPassword=bKPA8lMKiq%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

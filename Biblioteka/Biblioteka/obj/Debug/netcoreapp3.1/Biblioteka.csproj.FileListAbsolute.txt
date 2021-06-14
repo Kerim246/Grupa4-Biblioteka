@@ -434,7 +434,6 @@ C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\net
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.RazorCoreGenerate.cache
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewStart.cshtml.g.cs
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
-C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\Create.cshtml.g.cs
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\Delete.cshtml.g.cs
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\Details.cshtml.g.cs
@@ -453,3 +452,5 @@ C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\net
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.dll
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.pdb
 C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.genruntimeconfig.cache
+C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Home\Kontakt.cshtml.g.cs
+C:\Users\Kerim\Desktop\lol\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Home\Poklanjanje.cshtml.g.cs

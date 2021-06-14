@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Poklananje knjige!";
+}
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("RegistrujKnjigu", "Knjige", FormMethod.Post))
+{
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Naziv knjige</label>
+            @Html.TextBox("Naziv", null, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Pisac</label>
+            @Html.TextBox("Autor", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">Zanr</label>
+        @Html.TextBox("Zanr", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">Broj stranica</label>
+        @Html.TextBox("broj_stranica", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="inputAddress2">Kratki opis</label>
+        @Html.TextBox("Opis", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="inputAddress2">Kolicina</label>
+        @Html.TextBox("Kolicina", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="inputAddress2">Jezik</label>
+        @Html.TextBox("Jezik", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="inputAddress2">Date</label>
+        @Html.TextBox("Date", "", new { placeholder = "YYYY-MM-DD",@class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Potvrdi</button>
+</form>
+}

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Biblioteka.Controllers
 {
@@ -138,6 +139,76 @@ namespace Biblioteka.Controllers
             
         }
 
+        public ActionResult RegistrujKnjigu(IFormCollection formCollection)
+        {
+            string naslov = Request.Form["Naziv"];
+            string autor = Request.Form["Autor"];
+            string zanr = Request.Form["Zanr"];
+            string opis = Request.Form["Opis"];
+            string kolicina = Request.Form["Kolicina"];
+            string broj_stranica = Request.Form["broj_stranica"];
+            string jezik = Request.Form["Jezik"];
+            string datum = Request.Form["Date"];
+            
+
+            var str = "SELECT Max(id)+1 FROM Knjiga";
+
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(str, connection);
+            MySqlDataReader datareader = command.ExecuteReader();
+            int Id;
+            String izlaz = "";
+            if (datareader.Read())
+            {
+                izlaz = izlaz + datareader.GetValue(0);
+            }
+            connection.Close();
+            Id = int.Parse(izlaz);
+
+            var dodaj = "INSERT INTO Knjiga(id,naslov,autor,broj_stranica,datum_izdavanja,kolicina,opis) values (@id,@naslov,@autor,@broj_stranica,@datum_izdavanja,@kolicina,@opis)";
+
+            command = new MySqlCommand(dodaj, connection);
+
+            command.Parameters.AddWithValue("@id", Id);
+            command.Parameters.AddWithValue("@naslov", naslov);
+            command.Parameters.AddWithValue("@autor", autor);
+            command.Parameters.AddWithValue("@broj_stranica", broj_stranica);
+            command.Parameters.AddWithValue("@datum_izdavanja",DateTime.Parse(datum));
+            command.Parameters.AddWithValue("@kolicina", kolicina);
+            command.Parameters.AddWithValue("@opis", opis);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            dodaj = "INSERT INTO Jezik(knjiga_id,naziv) values (@knjiga_id,@naziv)";
+
+            command = new MySqlCommand(dodaj, connection);
+
+            command.Parameters.AddWithValue("@knjiga_id", Id);
+            command.Parameters.AddWithValue("@naziv", jezik);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            dodaj = "INSERT INTO Zanr(knjiga_id,naziv) values (@knjiga_id,@naziv)";
+
+            command = new MySqlCommand(dodaj, connection);
+
+            command.Parameters.AddWithValue("@knjiga_id", Id);
+            command.Parameters.AddWithValue("@naziv", zanr);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+
+            return RedirectToAction("Index");
+        }
+
+
         public ActionResult DodajIznajmljenu()
         {
             var cmd = "INSERT INTO IznajmljeneKnjige(knjiga_id,korisnik_id,datum_vracanja,datum_iznajmljivanja) values (@knjiga_id,@korisnik_id,@datum_vracanja,@datum_iznajmljivanja)";
@@ -159,15 +230,18 @@ namespace Biblioteka.Controllers
         }
 
         // GET: Knjige/Create
+        [Authorize(Roles = "Administrator, Bibliotekar")]
         public IActionResult Create()
         {
-            KnjigaPage kp = new KnjigaPage();
-            return View(kp);
+          //  KnjigaPage kp = new KnjigaPage();
+            return View();
         }
 
         // POST: Knjige/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Bibliotekar")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,naslov,autor,broj_stranica,datum_izdavanja,kolicina,opis")] Knjiga knjiga,[Bind("knjiga_id,naziv")] Jezik jezik)
@@ -183,6 +257,8 @@ namespace Biblioteka.Controllers
         }
 
         // GET: Knjige/Edit/5
+        [Authorize(Roles = "Administrator, Bibliotekar")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -201,6 +277,8 @@ namespace Biblioteka.Controllers
         // POST: Knjige/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Bibliotekar")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,naslov,autor,broj_stranica,datum_izdavanja,kolicina,opis")] Knjiga knjiga)
@@ -234,6 +312,7 @@ namespace Biblioteka.Controllers
         }
 
         // GET: Knjige/Delete/5
+        [Authorize(Roles = "Administrator, Bibliotekar")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -252,6 +331,7 @@ namespace Biblioteka.Controllers
         }
 
         // POST: Knjige/Delete/5
+        [Authorize(Roles = "Administrator, Bibliotekar")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

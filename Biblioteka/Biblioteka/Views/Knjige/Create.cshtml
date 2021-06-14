@@ -1,4 +1,4 @@
-﻿@model Biblioteka.Models.KnjigaPage
+﻿@model Biblioteka.Models.Knjiga
 
 @{
     ViewData["Title"] = "Create";
@@ -10,47 +10,55 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @using (Html.BeginForm("RegistrujKnjigu", "Knjige", FormMethod.Post))
+        {
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="naslov" class="control-label"></label>
-                <input asp-for="naslov" class="form-control" />
+                @Html.TextBox("Naziv", null, new { @class = "form-control" })
                 <span asp-validation-for="naslov" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="autor" class="control-label"></label>
-                <input asp-for="autor" class="form-control" />
+                @Html.TextBox("Autor", null, new { @class = "form-control" })
                 <span asp-validation-for="autor" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="broj_stranica" class="control-label"></label>
-                <input asp-for="broj_stranica" class="form-control" />
+                @Html.TextBox("broj_stranica", null, new { @class = "form-control" })
                 <span asp-validation-for="broj_stranica" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="datum_izdavanja" class="control-label"></label>
-                <input asp-for="datum_izdavanja" class="form-control" />
+                @Html.TextBox("Date", null, new { @class = "form-control", placeholder = "YYYY-MM-DD" })
                 <span asp-validation-for="datum_izdavanja" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="kolicina" class="control-label"></label>
-                <input asp-for="kolicina" class="form-control" />
+                @Html.TextBox("Kolicina", null, new { @class = "form-control" })
                 <span asp-validation-for="kolicina" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="opis" class="control-label"></label>
-                <input asp-for="opis" class="form-control" />
+                @Html.TextBox("Opis", null, new { @class = "form-control" })
                 <span asp-validation-for="opis" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="jezici" class="control-label"></label>
-                <input asp-for="jezici" class="form-control" />
-                <span asp-validation-for="jezici" class="text-danger"></span>
+                <label class="control-label">Jezik</label>
+                @Html.TextBox("Jezik", null, new { @class = "form-control" })
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Zanr</label>
+                @Html.TextBox("Zanr", null, new { @class = "form-control" })
+                <span class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+        }
     </div>
 </div>
 

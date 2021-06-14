@@ -25,13 +25,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Knjige" asp-action="Index">Knjige</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Pokloni knjigu</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Poklanjanje">Pokloni knjigu</a>
                         </li>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Kontakt</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Kontakt">Kontakt</a>
                         </li>
-                      
+                        
                     </ul>
                 </div>
             </div>

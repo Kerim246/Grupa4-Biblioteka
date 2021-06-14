@@ -31,6 +31,7 @@ namespace Biblioteka
                 options.UseMySQL(
                     Configuration.GetConnectionString("BibliotekaContext")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BibliotekaContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();

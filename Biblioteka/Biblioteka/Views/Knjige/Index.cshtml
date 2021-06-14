@@ -62,13 +62,16 @@
                 </td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Bibliotekar"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.id">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.id">Details</a>
+
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-}

@@ -26,7 +26,6 @@ namespace Biblioteka.Models
         public string autor { get; set; }
         [Required]
         [DisplayName("Broj stranica")]
-
         public int broj_stranica { get; set; }
 
         [Required, DataType(DataType.DateTime)]

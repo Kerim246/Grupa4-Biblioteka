@@ -23,7 +23,12 @@ namespace Biblioteka.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Poklanjanje()
+        {
+            return View();
+        }
+
+        public IActionResult Kontakt()
         {
             return View();
         }

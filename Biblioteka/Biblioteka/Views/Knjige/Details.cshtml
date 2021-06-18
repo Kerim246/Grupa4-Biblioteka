@@ -66,19 +66,21 @@
         </dd>
     </dl>
 </div>
-<p>Ostavi komentar za ovu knjigu!</p>
-@using (Html.BeginForm("Update", "Knjige", FormMethod.Post))
+@if (User.IsInRole("Korisnik"))
 {
-    @Html.TextArea("komentar")
-    <input type="submit" value="Potvrdi Komentar" />
+    <p>Ostavi komentar za ovu knjigu!</p>
+    @using (Html.BeginForm("Update", "Knjige", FormMethod.Post))
+    {
+        @Html.TextArea("komentar")
+        <input type="submit" value="Potvrdi Komentar" />
+    }
+    <br />
+    @using (Html.BeginForm("DodajIznajmljenu", "Knjige", FormMethod.Post))
+    {
+        <input type="submit" value="Pozajmi" />
+    }
 }
-<br />
-@using (Html.BeginForm("DodajIznajmljenu", "Knjige", FormMethod.Post))
-{
-    <input type ="submit" value="Pozajmi" />
-}
-
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

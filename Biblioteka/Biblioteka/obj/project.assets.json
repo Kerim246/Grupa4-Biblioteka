@@ -9671,11 +9671,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kerim\\Desktop\\lol\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+      "projectUniqueName": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
       "projectName": "Biblioteka",
-      "projectPath": "C:\\Users\\Kerim\\Desktop\\lol\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+      "projectPath": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
       "packagesPath": "C:\\Users\\Kerim\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kerim\\Desktop\\lol\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\obj\\",
+      "outputPath": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Kerim\\AppData\\Roaming\\NuGet\\NuGet.Config",

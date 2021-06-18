@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jcSoJF8ngHNQPiYEa/MsjhZsGEnHq4e/Ey8HCk8TgV5/5vSWigBWC6+de90Up/uAB4pbYOvrcEqF5jXnnS5keg==",
+  "dgSpecHash": "PU196pB1I28veXxLKAPNz8vjLrL9/yJ568b0OG/X7nf7uL2RpomOuDEho7wzloFim6/ktBM6y6Vilc6BF+AP5A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kerim\\Desktop\\lol\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+  "projectFilePath": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kerim\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Kerim\\.nuget\\packages\\google.protobuf\\3.11.4\\google.protobuf.3.11.4.nupkg.sha512",

@@ -1,4 +1,5 @@
 using Biblioteka.Data;
+using Biblioteka.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,7 @@ namespace Biblioteka
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                  .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BibliotekaContext>();
+            services.AddScoped<IUserService, UserService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

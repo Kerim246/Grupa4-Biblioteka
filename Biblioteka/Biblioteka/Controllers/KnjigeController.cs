@@ -13,6 +13,8 @@ using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Biblioteka.Service;
 
 namespace Biblioteka.Controllers
 {
@@ -21,12 +23,14 @@ namespace Biblioteka.Controllers
         private readonly BibliotekaContext _context;
         private string _connectionString = @"Server=sql11.freesqldatabase.com;Port=3306;Database=sql11418771;User=sql11418771;Password=bKPA8lMKiq;";
         public static int ajdi;
+        private readonly IUserService _userService;
 
         public IConfiguration Configuration { get; }
 
-        public KnjigeController(BibliotekaContext context)
+        public KnjigeController(BibliotekaContext context,IUserService _userService)
         {
             _context = context;
+            this._userService = _userService;
         }
 
         public int specialComparer(Knjiga k1, Knjiga k2)
@@ -306,24 +310,77 @@ namespace Biblioteka.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [Authorize(Roles ="Korisnik")]
         public ActionResult DodajIznajmljenu()
         {
+            var UserName = _userService.getUserId();
+
+           // System.Diagnostics.Debug.WriteLine("PLEASE " + UserName);
+
+            var dajKorisnikId = "SELECT Id FROM AspNetUsers where Id = '" + UserName + "'";
+
             var cmd = "INSERT INTO IznajmljeneKnjige(knjiga_id,korisnik_id,datum_vracanja,datum_iznajmljivanja) values (@knjiga_id,@korisnik_id,@datum_vracanja,@datum_iznajmljivanja)";
 
+            var provjeraValidnosti = "SELECT * FROM IznajmljeneKnjige where Korisnik_id= '" + UserName + "'" + " AND knjiga_id= '" + ajdi + "'";
+            var provjeraDaLiPrazno = "SELECT * FROM IznajmljeneKnjige";
             MySqlConnection connection = new MySqlConnection(_connectionString);
-
-            MySqlCommand command = new MySqlCommand(cmd, connection);
-            command.Parameters.AddWithValue("@Knjiga_id", ajdi);
-            command.Parameters.AddWithValue("@korisnik_id", 1);
-            command.Parameters.AddWithValue("@datum_iznajmljivanja", DateTime.Now);
-            command.Parameters.AddWithValue("@datum_vracanja", DateTime.Now.AddDays(30));
-
-
             connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
+            MySqlCommand command = new MySqlCommand(provjeraDaLiPrazno, connection);
+            MySqlDataReader datareader = command.ExecuteReader();
+            bool prolaz = false;
+            bool prolaz1 = true;
+            MySqlDataReader pomocni = datareader;
 
+            if (datareader.Read())        // Provjera da li je prazna tabela, ako jeste provjerava se da li je korisnik vec pozajmio datu knjigu, ako nije odobrava se pozajma
+            {
+                connection.Close();
+                connection.Open();
+                command = new MySqlCommand(provjeraValidnosti, connection);
+                datareader = command.ExecuteReader();
+
+                if (datareader.Read())
+                {
+                    prolaz1 = false;
+                    connection.Close();
+                    TempData["Message"] = "Vec ste pozajmili ovu knjigu!";
+
+                    return RedirectToAction("Greska");
+                }
+                else
+                {
+                    prolaz = true;
+                }
+            }
+            if((prolaz && prolaz1) || !pomocni.Read())   // Ako je prazna tabela ili ako je validna pozajma
+            {
+                connection.Close();
+                connection.Open();
+
+                command = new MySqlCommand(dajKorisnikId, connection);
+
+                 datareader = command.ExecuteReader();
+
+                List<String> lista = new List<String>();
+                string izlaz = "";
+                while (datareader.Read())
+                {
+                    izlaz = izlaz + datareader.GetValue(0);
+                }
+                connection.Close();
+
+
+                command = new MySqlCommand(cmd, connection);
+
+                command.Parameters.AddWithValue("@Knjiga_id", ajdi);
+                command.Parameters.AddWithValue("@korisnik_id", izlaz);
+                command.Parameters.AddWithValue("@datum_iznajmljivanja", DateTime.Now);
+                command.Parameters.AddWithValue("@datum_vracanja", DateTime.Now.AddDays(30));
+
+
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
             return RedirectToAction("Index");
         }
 
@@ -332,6 +389,11 @@ namespace Biblioteka.Controllers
         public IActionResult Create()
         {
           //  KnjigaPage kp = new KnjigaPage();
+            return View();
+        }
+
+        public IActionResult Greska()
+        {
             return View();
         }
 

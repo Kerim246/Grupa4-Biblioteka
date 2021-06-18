@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    string selectedValue = "Bosanski";
 }
 
 <p>
@@ -13,7 +14,42 @@
 {
     @Html.TextBox("searching")
     <input type="submit" value="Pretraga" />
+
+
 }
+@using (Html.BeginForm("Sortiraj", "Knjige", FormMethod.Post))
+{
+<select id="nesto" name="zanr">
+    <option>Filtiraj po Zanru</option>
+    <option value="Akcija">Akcija</option>
+    <option value="Horror">Horror</option>
+    <option value="Sci-Fi">Sci-Fi</option>
+    <option value="Triler">Triler</option>
+    <option value="Romansa">Romansa</option>
+    <option value="Historija">Historija</option>
+    <option value="Misterija">Misterija</option>
+</select>
+
+<select id="nesto" name="jezik">
+    <option>Filtriraj po jeziku</option>
+    <option value="Bosanski">Bosanski</option>
+    <option value="Njemacki">Njemacki</option>
+    <option value="Engleski">Engleski</option>
+    <option value="Ruski">Ruski</option>
+
+</select>
+
+<select id="nesto" name="sort">
+    <option>Sortiranje</option>
+    <option value="Abecedni">Abecednom poretku</option>
+    <option value="Datumu">Datumu(opadajuci poredak)</option>
+    <option value="brojuStranica">Broju stranica(opadajuci poredak)</option>
+    <option value="Kolicina">Broju dostupnih knjiga(opadajuci poredak)</option>
+</select>
+    <input type="submit" value="Pretraga" />
+
+}
+
 <table class="table">
     <thead>
         <tr>

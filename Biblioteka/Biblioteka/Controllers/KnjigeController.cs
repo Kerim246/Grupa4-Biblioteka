@@ -29,9 +29,14 @@ namespace Biblioteka.Controllers
             _context = context;
         }
 
+        public int specialComparer(Knjiga k1, Knjiga k2)
+        {
+            if (k1.broj_stranica > k2.broj_stranica) return 1;
+            else return -1;
+        }
 
         // GET: Knjige
-        public async Task<IActionResult> Index(string searching)
+        public async Task<IActionResult> Index(string searching,string jezik, string zanr, string sort)
         {
             var knjige = from k in _context.Knjiga select k;
 
@@ -39,9 +44,102 @@ namespace Biblioteka.Controllers
             {
                 knjige = knjige.Where(k => k.naslov.Contains(searching) || k.autor.Contains(searching));
 
+            }        
+
+            if (!String.IsNullOrEmpty(jezik))
+            {
+                //   knjige = knjige.Where(k => k.autor.Equals(sort));
+                
+                foreach (var k in knjige)
+                {
+                    var str = "select j.knjiga_id from Jezik j,Knjiga k where j.knjiga_id = k.id AND j.naziv = '" + jezik + "'";
+
+                    List<String> l = vratiListu(str);
+                    List<String> sigurnaLista = new List<String>();
+
+                    foreach(var asd in l)
+                    {
+                        if (!asd.Equals(",")) sigurnaLista.Add(asd);
+                    }
+
+                   // List<int> intList = sigurnaLista.ConvertAll(int.Parse);
+
+                    List<int> ints = sigurnaLista.Select(s => Int32.TryParse(s, out int n) ? n : (int?)null).Where(n => n.HasValue).Select(n => n.Value).ToList();
+
+                      foreach (int id in ints)
+                           {
+                             knjige = knjige.Where(k => k.id == id);
+                            }
+                    
+                }
+                
+            }
+            
+            if (!String.IsNullOrEmpty(zanr))
+            {
+                //   knjige = knjige.Where(k => k.autor.Equals(sort));
+
+                foreach (var k in knjige)
+                {
+                    var str = "select z.knjiga_id from Zanr z,Knjiga k where z.knjiga_id = k.id AND z.naziv = '" +zanr + "'";
+
+                    List<String> l = vratiListu(str);
+                    List<String> sigurnaLista = new List<String>();
+
+                    foreach (var asd in l)
+                    {
+                        if (!asd.Equals(",")) sigurnaLista.Add(asd);
+                    }
+
+                    // List<int> intList = sigurnaLista.ConvertAll(int.Parse);
+
+                    List<int> ints = sigurnaLista.Select(s => Int32.TryParse(s, out int n) ? n : (int?)null).Where(n => n.HasValue).Select(n => n.Value).ToList();
+
+                    foreach (int id in ints)
+                    {
+                        knjige = knjige.Where(k => k.id == id);
+                    }
+
+                }
+
             }
 
-            return View(await knjige.ToListAsync());
+            if (!String.IsNullOrEmpty(sort))
+            {
+                switch(sort)
+                {
+                    case "Abecedni":
+                        knjige = knjige.OrderBy(x => x.naslov);
+                        break;
+
+                    case "Datumu":
+                        knjige = knjige.OrderByDescending(x => x.datum_izdavanja);
+                        break;
+
+                    case "brojuStranica":
+                        knjige = knjige.OrderByDescending(k => k.broj_stranica);
+                        break;
+
+                    case "Kolicina":
+                        knjige = knjige.OrderByDescending(k => k.kolicina);
+                        break;
+
+                }
+
+            }
+            
+                return View(await knjige.ToListAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Sortiraj(IFormCollection formCollection)
+        {
+            string zanr = formCollection["zanr"];
+            string language = formCollection["jezik"];
+
+            string sortValue = formCollection["sort"];
+
+            return RedirectToAction("Index",new { jezik = language, zanr = zanr, sort = sortValue});
         }
 
         // GET: Knjige/Details/5
@@ -59,7 +157,7 @@ namespace Biblioteka.Controllers
                 return NotFound();
             }
 
-                KnjigaPage k = new KnjigaPage();
+            KnjigaPage k = new KnjigaPage();
 
             k.id = knjiga.id;
             k.autor = knjiga.autor;
@@ -130,7 +228,7 @@ namespace Biblioteka.Controllers
                 foreach (var j in listaStr)
                 {
                     lista.Add(j);
-                    lista.Add("\n");
+                    lista.Add(",");
                 }
 
             lista.RemoveAt(lista.Count - 1);

@@ -41,7 +41,6 @@ namespace Biblioteka.Models
         [Required]
         [DisplayName("Opis:")]
         public string opis { get; set; }
-        
 
         public Knjiga(string naslov,string autor,int broj_stranica,DateTime datum_izdavanja,int kolicina,string opis)
         {

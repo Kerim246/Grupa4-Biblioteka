@@ -21,9 +21,10 @@ namespace Biblioteka.Controllers
     public class KnjigeController : Controller
     {
         private readonly BibliotekaContext _context;
-        private string _connectionString = @"Server=sql11.freesqldatabase.com;Port=3306;Database=sql11418771;User=sql11418771;Password=bKPA8lMKiq;";
+        private string _connectionString = @"Server=sql11.freesqldatabase.com;Port=3306;Database=sql11422704;User=sql11422704;Password=K89mJvgU41;";
         public static int ajdi;
         private readonly IUserService _userService;
+        private static double trenutnaOcjena; 
 
         public IConfiguration Configuration { get; }
 
@@ -169,12 +170,17 @@ namespace Biblioteka.Controllers
             k.naslov = knjiga.naslov;
             k.opis = knjiga.opis;
             k.kolicina = knjiga.kolicina;
-            k.datum_izdavanja = knjiga.datum_izdavanja; 
-              var str = "select naziv from Jezik where knjiga_id = '" + knjiga.id + "'";
+            k.datum_izdavanja = knjiga.datum_izdavanja;
+            ajdi = k.id;
+
+
+            var str = "select naziv from Jezik where knjiga_id = '" + knjiga.id + "'";
            // var str = "select naziv from Jezik where knjiga_id = @id";
 
             var str1 = "SELECT naziv from Zanr where knjiga_id=" + k.id;
             var str2 = "SELECT komentar from Komentar where knjiga_id=" + k.id;
+            var vratiOcjenu = "SELECT ocjena FROM Ocjena where id=" + k.id;
+
             // var idParamtear = new SqlParameter("@id", k.id);
             //var jezici = _context.Jezik.FromSql("SELECT naziv from Jezik where id = @id", idParamtear);
             //k.jezici = jezici;
@@ -182,11 +188,16 @@ namespace Biblioteka.Controllers
             k.jezici = vratiListu(str);
             k.zanrovi = vratiListu(str1);
             k.komentari = vratiListu(str2);
+            var mapa = VratiOcjenu();
+            double ocjena = 0;
+        
+            foreach (KeyValuePair<double, int> kvp in mapa)
+            {
+                ocjena = kvp.Key;
 
-            ajdi = k.id;
-       //     KnjigaPage k = new KnjigaPage(knjiga, vratiListu(str));
-            //     k.zanrovi = vratiListu(str1,k.id);
-            //    k.komentari = vratiListu(str2,k.id);
+            }
+            k.ocjena = Math.Round(ocjena,2);             // Zaokruzeno na dvije decimale
+
 
             return View(k);
         }
@@ -209,8 +220,8 @@ namespace Biblioteka.Controllers
             return RedirectToAction("Index");
 
         } 
-
-        public List<String> vratiListu(String str)
+       
+        public List<string> vratiListu(String str)
         {
 
             MySqlConnection connection = new MySqlConnection(_connectionString);
@@ -239,6 +250,134 @@ namespace Biblioteka.Controllers
                 return lista;
 
             
+        }
+
+        private Dictionary<double,int> VratiOcjenu(bool ocjenjivanje = false)         // vraca mapu gdje prvi atribut predstavlja ocjenu a drugi broj ocjena
+        {
+            var map = new Dictionary<double, int>();
+
+            var userName = _userService.getUserId();
+
+            var vratiDosadasnjeOcjene = "";
+            if(ocjenjivanje == false)
+            vratiDosadasnjeOcjene = "SELECT ocjena FROM Ocjena where id=" + ajdi + " AND korisnik_id IS NULL"; // Ako nas zanima samo prosjecna ocjena za datu knjigu 
+            else
+            vratiDosadasnjeOcjene = "SELECT ocjena FROM Ocjena where id=" + ajdi + " AND korisnik_id IS NOT NULL AND korisnik_id !='" + userName + "'";  // Ako je korisnik_id null, onda je ocjena opca prosjecna, ako nije onda je userova
+
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(vratiDosadasnjeOcjene, connection);
+
+            MySqlDataReader datareader = command.ExecuteReader();
+
+            double iznos = 0;
+            string izlaz = "";
+            int br_ocjena = 0;
+            while (datareader.Read())
+            {
+                izlaz = izlaz + datareader.GetValue(0);
+                iznos += Double.Parse(izlaz);
+                br_ocjena++;
+            //    System.Diagnostics.Debug.WriteLine("MAMA");
+                izlaz = "";
+            }
+            connection.Close();
+          //  System.Diagnostics.Debug.WriteLine("Iznos  " + iznos.ToString() + " a broj ocjena " + br_ocjena);
+
+            if (!ocjenjivanje)
+            iznos /= br_ocjena;
+
+            map.Add(iznos, br_ocjena);
+
+            if(Double.IsNaN(iznos)) { return new Dictionary<double, int>(); }
+            return map;
+        }
+
+        public ActionResult Ocijeni(IFormCollection formcollection)
+        {
+            var userName = _userService.getUserId();
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+
+            string valueOcjena = formcollection["ocjena"];
+
+            var upitDodajOcjenu = "INSERT INTO Ocjena(id,ocjena,korisnik_id) Values (@id,@ocjena,@korisnik_id)";
+            var provjerausera = "SELECT id from Ocjena WHERE korisnik_id = '" + userName + "'" + " AND id ="+ajdi;
+            var DaLiPostojiOcjena = "SELECT ocjena FROM Ocjena where korisnik_id IS NULL and id =" + ajdi;
+
+           
+
+            var trenutna = VratiOcjenu(true);
+            double iznos = 0;
+            int br_ocjena = 0;
+            foreach (KeyValuePair<double, int> kvp in trenutna)
+            {
+                iznos = kvp.Key;
+                br_ocjena = kvp.Value;
+            }
+
+            br_ocjena++;
+
+            iznos = (iznos +int.Parse(valueOcjena)) / br_ocjena;
+
+
+            MySqlCommand command = new MySqlCommand(provjerausera, connection);
+
+            connection.Open();
+
+            MySqlDataReader datareader = command.ExecuteReader();
+
+            if (datareader.Read())
+            {
+                connection.Close();
+                var updateOcjena = "UPDATE Ocjena SET ocjena ='" + int.Parse(valueOcjena) +  "'" + " where korisnik_id = '" + userName + "'" + " AND id=" + ajdi;
+                command = new MySqlCommand(updateOcjena, connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            else
+            {
+                connection.Close();
+                command = new MySqlCommand(upitDodajOcjenu, connection);
+                command.Parameters.AddWithValue("@id", ajdi);
+                command.Parameters.AddWithValue("@ocjena", int.Parse(valueOcjena));   // ocjena koju je dati user dao  
+                command.Parameters.AddWithValue("@korisnik_id", userName);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            connection.Open();
+            command = new MySqlCommand(DaLiPostojiOcjena, connection);
+
+            datareader = command.ExecuteReader();
+
+            if (!datareader.Read())
+            {
+                connection.Close();
+                command = new MySqlCommand(upitDodajOcjenu, connection);
+                command.Parameters.AddWithValue("@id", ajdi);
+                command.Parameters.AddWithValue("@ocjena", iznos);      // Prosjecna ocjena za knjigu
+                command.Parameters.AddWithValue("@korisnik_id", null);    
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            else
+            {
+                connection.Close();
+                var updateOcjena = "UPDATE Ocjena SET ocjena ='" + iznos + "'" + " where korisnik_id IS NULL AND id=" + ajdi;  // updejtovanje prosjecne ocjene za knjigu
+                command = new MySqlCommand(updateOcjena, connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+            }
+
+           
+
+            return RedirectToAction("Index");
+
         }
 
         public ActionResult RegistrujKnjigu(IFormCollection formCollection)
@@ -315,7 +454,7 @@ namespace Biblioteka.Controllers
         {
             var UserName = _userService.getUserId();
 
-           // System.Diagnostics.Debug.WriteLine("PLEASE " + UserName);
+          //  System.Diagnostics.Debug.WriteLine("PLEASE " + UserName);
 
             var dajKorisnikId = "SELECT Id FROM AspNetUsers where Id = '" + UserName + "'";
 

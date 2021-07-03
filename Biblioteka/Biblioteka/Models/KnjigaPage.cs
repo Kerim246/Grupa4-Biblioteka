@@ -35,7 +35,8 @@ namespace Biblioteka.Models
         [DisplayName("Komentari: ")]
         public List<String> komentari { get; set; }
 
-        public Ocjena ocjena { get; set; }
+        [DisplayName("Ocjena: ")]
+        public double ocjena { get; set; }
 
         public KnjigaPage() {  }
 

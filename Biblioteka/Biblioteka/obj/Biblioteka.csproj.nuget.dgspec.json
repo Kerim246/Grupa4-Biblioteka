@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {}
+    "C:\\Users\\Kerim-PC\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {
+    "C:\\Users\\Kerim-PC\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+        "projectUniqueName": "C:\\Users\\Kerim-PC\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
         "projectName": "Biblioteka",
-        "projectPath": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
-        "packagesPath": "C:\\Users\\Kerim\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kerim\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\obj\\",
+        "projectPath": "C:\\Users\\Kerim-PC\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
+        "packagesPath": "C:\\Users\\Kerim-PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kerim-PC\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Kerim\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kerim-PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -89,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

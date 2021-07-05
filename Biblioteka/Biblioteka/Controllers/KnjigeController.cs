@@ -24,7 +24,6 @@ namespace Biblioteka.Controllers
         private string _connectionString = @"Server=sql11.freesqldatabase.com;Port=3306;Database=sql11422704;User=sql11422704;Password=K89mJvgU41;";
         public static int ajdi;
         private readonly IUserService _userService;
-        private static double trenutnaOcjena; 
 
         public IConfiguration Configuration { get; }
 
@@ -44,7 +43,7 @@ namespace Biblioteka.Controllers
         public async Task<IActionResult> Index(string searching,string jezik, string zanr, string sort)
         {
             var knjige = from k in _context.Knjiga select k;
-
+            
             if (!String.IsNullOrEmpty(searching))
             {
                 knjige = knjige.Where(k => k.naslov.Contains(searching) || k.autor.Contains(searching));
@@ -54,28 +53,27 @@ namespace Biblioteka.Controllers
             if (!String.IsNullOrEmpty(jezik))
             {
                 //   knjige = knjige.Where(k => k.autor.Equals(sort));
-                
+
                 foreach (var k in knjige)
                 {
                     var str = "select j.knjiga_id from Jezik j,Knjiga k where j.knjiga_id = k.id AND j.naziv = '" + jezik + "'";
+                 //   System.Diagnostics.Debug.WriteLine("MAMA" + str);
 
                     List<String> l = vratiListu(str);
                     List<String> sigurnaLista = new List<String>();
 
-                    foreach(var asd in l)
-                    {
-                        if (!asd.Equals(",")) sigurnaLista.Add(asd);
-                    }
+                             foreach(var asd in l)
+                             {
+                                 if (!asd.Equals(",")) sigurnaLista.Add(asd);
+                             }
 
-                   // List<int> intList = sigurnaLista.ConvertAll(int.Parse);
+                    // List<int> intList = sigurnaLista.ConvertAll(int.Parse);
 
-                    List<int> ints = sigurnaLista.Select(s => Int32.TryParse(s, out int n) ? n : (int?)null).Where(n => n.HasValue).Select(n => n.Value).ToList();
 
-                      foreach (int id in ints)
-                           {
-                             knjige = knjige.Where(k => k.id == id);
-                            }
+                    List<int> ints = sigurnaLista.Select(s => Int32.TryParse(s, out int n) ? n : (int?)null).Where(n => n.HasValue).Select(n => n.Value).ToList(); // Sigurna pretvorba
                     
+                    knjige = knjige.Where(item1 => ints.Any(item2 => item1.id == item2));
+                              
                 }
                 
             }
@@ -83,10 +81,10 @@ namespace Biblioteka.Controllers
             if (!String.IsNullOrEmpty(zanr))
             {
                 //   knjige = knjige.Where(k => k.autor.Equals(sort));
-
                 foreach (var k in knjige)
                 {
                     var str = "select z.knjiga_id from Zanr z,Knjiga k where z.knjiga_id = k.id AND z.naziv = '" +zanr + "'";
+                    System.Diagnostics.Debug.WriteLine("MAMA" + str);
 
                     List<String> l = vratiListu(str);
                     List<String> sigurnaLista = new List<String>();
@@ -100,14 +98,12 @@ namespace Biblioteka.Controllers
 
                     List<int> ints = sigurnaLista.Select(s => Int32.TryParse(s, out int n) ? n : (int?)null).Where(n => n.HasValue).Select(n => n.Value).ToList();
 
-                    foreach (int id in ints)
-                    {
-                        knjige = knjige.Where(k => k.id == id);
-                    }
+                    knjige = knjige.Where(item1 => ints.Any(item2 => item1.id == item2));
+
 
                 }
 
-            }
+            }         
 
             if (!String.IsNullOrEmpty(sort))
             {
@@ -128,12 +124,37 @@ namespace Biblioteka.Controllers
                     case "Kolicina":
                         knjige = knjige.OrderByDescending(k => k.kolicina);
                         break;
+                    case "Ocjena":                      
+                        knjige = knjige.OrderByDescending(k => k.ocjena);
+                        break;
 
                 }
 
             }
             
                 return View(await knjige.ToListAsync());
+        }
+
+        private double returnMark(Knjiga k)
+        {
+            var vratiDosadasnjeOcjene = "SELECT ocjena FROM Ocjena where id=" + k.id + " AND korisnik_id IS NULL";
+
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(vratiDosadasnjeOcjene, connection);
+
+            MySqlDataReader datareader = command.ExecuteReader();
+
+            string izlaz = "";
+            double ocjena = 0;
+            if (datareader.Read())
+            {
+                izlaz = izlaz + datareader.GetValue(0);
+                ocjena = Double.Parse(izlaz);
+            }
+            connection.Close();
+            return ocjena;
+
         }
 
         [HttpPost]
@@ -231,23 +252,31 @@ namespace Biblioteka.Controllers
 
                 MySqlDataReader datareader = command.ExecuteReader();
             
-                List<String> lista = new List<String>();
+                List<string> lista = new List<string>();
                 string izlaz = "";
-                while (datareader.Read())
-                {
-                    izlaz = izlaz + datareader.GetValue(0) + ",";
-                }
+           while (datareader.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("MAMA");
+
+                izlaz = izlaz + datareader.GetValue(0) + ",";
+            }
             connection.Close();
             string[] listaStr = izlaz.Split(",");
 
-                foreach (var j in listaStr)
+
+            // List<String> l = new List<string>(listaStr);
+            foreach (var j in listaStr)
                 {
                     lista.Add(j);
                     lista.Add(",");
-                }
+
+            }
+
 
             lista.RemoveAt(lista.Count - 1);
-                return lista;
+
+   
+            return lista;
 
             
         }
@@ -259,10 +288,10 @@ namespace Biblioteka.Controllers
             var userName = _userService.getUserId();
 
             var vratiDosadasnjeOcjene = "";
-            if(ocjenjivanje == false)
-            vratiDosadasnjeOcjene = "SELECT ocjena FROM Ocjena where id=" + ajdi + " AND korisnik_id IS NULL"; // Ako nas zanima samo prosjecna ocjena za datu knjigu 
+            if (ocjenjivanje == false)
+                vratiDosadasnjeOcjene = "SELECT ocjena FROM Knjiga where id=" + ajdi;
             else
-            vratiDosadasnjeOcjene = "SELECT ocjena FROM Ocjena where id=" + ajdi + " AND korisnik_id IS NOT NULL AND korisnik_id !='" + userName + "'";  // Ako je korisnik_id null, onda je ocjena opca prosjecna, ako nije onda je userova
+                vratiDosadasnjeOcjene = "SELECT ocjena FROM Ocjena where id=" + ajdi + " AND korisnik_id IS NOT NULL AND korisnik_id !='" + userName + "'";  // Ako je korisnik_id null, onda je ocjena opca prosjecna, ako nije onda je userova
 
             MySqlConnection connection = new MySqlConnection(_connectionString);
             connection.Open();
@@ -274,10 +303,13 @@ namespace Biblioteka.Controllers
             string izlaz = "";
             int br_ocjena = 0;
             while (datareader.Read())
-            {
+            {         
                 izlaz = izlaz + datareader.GetValue(0);
-                iznos += Double.Parse(izlaz);
-                br_ocjena++;
+                if (izlaz != null && !izlaz.Equals(""))
+                {
+                    iznos += Double.Parse(izlaz);
+                    br_ocjena++;
+                }
             //    System.Diagnostics.Debug.WriteLine("MAMA");
                 izlaz = "";
             }
@@ -302,8 +334,7 @@ namespace Biblioteka.Controllers
 
             var upitDodajOcjenu = "INSERT INTO Ocjena(id,ocjena,korisnik_id) Values (@id,@ocjena,@korisnik_id)";
             var provjerausera = "SELECT id from Ocjena WHERE korisnik_id = '" + userName + "'" + " AND id ="+ajdi;
-            var DaLiPostojiOcjena = "SELECT ocjena FROM Ocjena where korisnik_id IS NULL and id =" + ajdi;
-
+            var DaLiPostojiOcjena = "SELECT ocjena FROM Knjiga where id =" + ajdi;
            
 
             var trenutna = VratiOcjenu(true);
@@ -325,11 +356,12 @@ namespace Biblioteka.Controllers
             connection.Open();
 
             MySqlDataReader datareader = command.ExecuteReader();
+            var UpdateProsjecnuOcjenu = "UPDATE Knjiga set ocjena=@ocjena Where id=@id";
 
             if (datareader.Read())
             {
                 connection.Close();
-                var updateOcjena = "UPDATE Ocjena SET ocjena ='" + int.Parse(valueOcjena) +  "'" + " where korisnik_id = '" + userName + "'" + " AND id=" + ajdi;
+                var updateOcjena = "UPDATE Ocjena SET ocjena ='" + int.Parse(valueOcjena) + "'" + " where korisnik_id = '" + userName + "'" + " AND id=" + ajdi;
                 command = new MySqlCommand(updateOcjena, connection);
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -346,35 +378,12 @@ namespace Biblioteka.Controllers
                 command.ExecuteNonQuery();
                 connection.Close();
             }
-
+            command = new MySqlCommand(UpdateProsjecnuOcjenu, connection);
+            command.Parameters.AddWithValue("@ocjena", iznos);
+            command.Parameters.AddWithValue("@id", ajdi);
             connection.Open();
-            command = new MySqlCommand(DaLiPostojiOcjena, connection);
-
-            datareader = command.ExecuteReader();
-
-            if (!datareader.Read())
-            {
-                connection.Close();
-                command = new MySqlCommand(upitDodajOcjenu, connection);
-                command.Parameters.AddWithValue("@id", ajdi);
-                command.Parameters.AddWithValue("@ocjena", iznos);      // Prosjecna ocjena za knjigu
-                command.Parameters.AddWithValue("@korisnik_id", null);    
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
-            else
-            {
-                connection.Close();
-                var updateOcjena = "UPDATE Ocjena SET ocjena ='" + iznos + "'" + " where korisnik_id IS NULL AND id=" + ajdi;  // updejtovanje prosjecne ocjene za knjigu
-                command = new MySqlCommand(updateOcjena, connection);
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-
-            }
-
-           
+            command.ExecuteNonQuery();
+            connection.Close();
 
             return RedirectToAction("Index");
 
@@ -527,7 +536,15 @@ namespace Biblioteka.Controllers
         [Authorize(Roles = "Administrator, Bibliotekar")]
         public IActionResult Create()
         {
-          //  KnjigaPage kp = new KnjigaPage();
+            List<String> jezici = new List<String>
+            {
+                "Bosanski",
+                "Engleski",
+                "Njemacki",
+                "Ruski"
+            };
+            ViewBag.Jezici = jezici;
+            //  KnjigaPage kp = new KnjigaPage();
             return View();
         }
 

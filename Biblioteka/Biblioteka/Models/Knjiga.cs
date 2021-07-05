@@ -42,6 +42,8 @@ namespace Biblioteka.Models
         [DisplayName("Opis:")]
         public string opis { get; set; }
 
+        [Required]
+        public double ocjena { get; set; }
         public Knjiga(string naslov,string autor,int broj_stranica,DateTime datum_izdavanja,int kolicina,string opis)
         {
             this.naslov = naslov;

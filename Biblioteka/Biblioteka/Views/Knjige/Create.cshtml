@@ -46,7 +46,12 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Jezik</label>
-                @Html.TextBox("Jezik", null, new { @class = "form-control" })
+                <select name="jezik" class="form-control">
+                    @foreach(string item in ViewBag.Jezici)
+                {
+                    <option value="@item">@item</option>
+                }
+                </select>
                 <span class="text-danger"></span>
             </div>
             <div class="form-group">

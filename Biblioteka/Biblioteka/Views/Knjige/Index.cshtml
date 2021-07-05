@@ -7,20 +7,22 @@
 }
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj novu knjigu!</a>
 </p>
-
+<br />
+<p>Pretrazi po naslovu ili autoru knjige!</p>
 @using (Html.BeginForm("Index", "Knjige", FormMethod.Get))
 {
     @Html.TextBox("searching")
-    <input type="submit" value="Pretraga" />
+    <input type="submit" value="Pretraga" class="btn btn-default" />
 
 
 }
+<br />
 @using (Html.BeginForm("Sortiraj", "Knjige", FormMethod.Post))
 {
-<select id="nesto" name="zanr">
-    <option>Filtiraj po Zanru</option>
+<select id="genre" name="zanr" class="form-control" onchange="FilterSort()">
+    <option value="" selected disabled hidden>Filtriraj po zanru</option>
     <option value="Akcija">Akcija</option>
     <option value="Horror">Horror</option>
     <option value="Sci-Fi">Sci-Fi</option>
@@ -29,27 +31,49 @@
     <option value="Historija">Historija</option>
     <option value="Misterija">Misterija</option>
 </select>
+<br />
 
-<select id="nesto" name="jezik">
-    <option>Filtriraj po jeziku</option>
+<select id="language" name="jezik" class="form-control" onchange="FilterSort()">
+    <option value="" selected disabled hidden>Filtriraj po jeziku</option>
     <option value="Bosanski">Bosanski</option>
     <option value="Njemacki">Njemacki</option>
     <option value="Engleski">Engleski</option>
     <option value="Ruski">Ruski</option>
 
 </select>
-
-<select id="nesto" name="sort">
-    <option>Sortiranje</option>
+<br />
+<select id="sortV" name="sort" class="form-control" onchange="FilterSort()">
+    <option value="" selected disabled hidden>Sortiranje</option>
     <option value="Abecedni">Abecednom poretku</option>
     <option value="Datumu">Datumu(opadajuci poredak)</option>
     <option value="brojuStranica">Broju stranica(opadajuci poredak)</option>
     <option value="Kolicina">Broju dostupnih knjiga(opadajuci poredak)</option>
+    <option value="Ocjena">Po ocjeni</option>
+
 </select>
-    <input type="submit" value="Pretraga" />
+<br />
+<script>
+    function FilterSort() {
+        var genre = document.getElementById("genre").value;
+        var language = document.getElementById("language").value;
+        var sortV = document.getElementById("sortV").value;
+
+        if (genre == null) {
+            genre = "Filtiraj";
+        }
+        if (language == null) {
+            language = "Filtriraj";
+        }
+        if (sortV == null) {
+            sortV = "Sortiranje";
+        }
+        window.location.href = "/Knjige?jezik=" + language +"&zanr="+genre+"&sort="+sortV;
+    }
+</script>
+    <input type="submit" value="Pretraga" class="btn btn-default" />
 
 }
-
+<br />
 <table class="table">
     <thead>
         <tr>

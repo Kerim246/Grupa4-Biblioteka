@@ -112,6 +112,9 @@ namespace Biblioteka.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("broj_puta_iznajmljena")
+                        .HasColumnType("int");
+
                     b.Property<int>("broj_stranica")
                         .HasColumnType("int");
 
@@ -124,6 +127,9 @@ namespace Biblioteka.Migrations
                     b.Property<string>("naslov")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("ocjena")
+                        .HasColumnType("double");
 
                     b.Property<string>("opis")
                         .IsRequired()

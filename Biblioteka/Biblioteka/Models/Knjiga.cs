@@ -44,6 +44,9 @@ namespace Biblioteka.Models
 
         [Required]
         public double ocjena { get; set; }
+
+        [Required]
+        public int broj_puta_iznajmljena { get; set; }
         public Knjiga(string naslov,string autor,int broj_stranica,DateTime datum_izdavanja,int kolicina,string opis)
         {
             this.naslov = naslov;

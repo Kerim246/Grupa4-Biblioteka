@@ -131,7 +131,9 @@ namespace Biblioteka.Migrations
                     broj_stranica = table.Column<int>(nullable: false),
                     datum_izdavanja = table.Column<DateTime>(nullable: false),
                     kolicina = table.Column<int>(nullable: false),
-                    opis = table.Column<string>(nullable: false)
+                    opis = table.Column<string>(nullable: false),
+                    ocjena = table.Column<double>(nullable: false),
+                    broj_puta_iznajmljena = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -21,9 +21,10 @@ namespace Biblioteka.Controllers
     public class KnjigeController : Controller
     {
         private readonly BibliotekaContext _context;
-        private string _connectionString = @"Server=sql11.freesqldatabase.com;Port=3306;Database=sql11422704;User=sql11422704;Password=K89mJvgU41;";
+        private string _connectionString = @"Server=sql4.freesqldatabase.com;Port=3306;Database=sql4432543;User=sql4432543;Password=nvTPWA14cN;";
         public static int ajdi;
         private readonly IUserService _userService;
+        private static DateTime date;
 
         public IConfiguration Configuration { get; }
 
@@ -84,7 +85,7 @@ namespace Biblioteka.Controllers
                 foreach (var k in knjige)
                 {
                     var str = "select z.knjiga_id from Zanr z,Knjiga k where z.knjiga_id = k.id AND z.naziv = '" +zanr + "'";
-                    System.Diagnostics.Debug.WriteLine("MAMA" + str);
+                 //   System.Diagnostics.Debug.WriteLine("MAMA" + str);
 
                     List<String> l = vratiListu(str);
                     List<String> sigurnaLista = new List<String>();
@@ -128,6 +129,9 @@ namespace Biblioteka.Controllers
                         knjige = knjige.OrderByDescending(k => k.ocjena);
                         break;
 
+                    case "Popularnosti":
+                        knjige = knjige.OrderByDescending(k => k.broj_puta_iznajmljena);
+                        break;
                 }
 
             }
@@ -256,8 +260,6 @@ namespace Biblioteka.Controllers
                 string izlaz = "";
            while (datareader.Read())
             {
-                System.Diagnostics.Debug.WriteLine("MAMA");
-
                 izlaz = izlaz + datareader.GetValue(0) + ",";
             }
             connection.Close();
@@ -398,8 +400,8 @@ namespace Biblioteka.Controllers
             string kolicina = Request.Form["Kolicina"];
             string broj_stranica = Request.Form["broj_stranica"];
             string jezik = Request.Form["Jezik"];
-            string datum = Request.Form["Date"];
-            
+
+            string datum = Request.Form["datum"];
 
             var str = "SELECT Max(id)+1 FROM Knjiga";
 
@@ -407,13 +409,16 @@ namespace Biblioteka.Controllers
             connection.Open();
             MySqlCommand command = new MySqlCommand(str, connection);
             MySqlDataReader datareader = command.ExecuteReader();
-            int Id;
+            int Id=1;
             String izlaz = "";
             if (datareader.Read())
             {
                 izlaz = izlaz + datareader.GetValue(0);
+                  System.Diagnostics.Debug.WriteLine("izlaz " + izlaz);
+
             }
             connection.Close();
+            if(izlaz != "")
             Id = int.Parse(izlaz);
 
             var dodaj = "INSERT INTO Knjiga(id,naslov,autor,broj_stranica,datum_izdavanja,kolicina,opis) values (@id,@naslov,@autor,@broj_stranica,@datum_izdavanja,@kolicina,@opis)";
@@ -424,7 +429,7 @@ namespace Biblioteka.Controllers
             command.Parameters.AddWithValue("@naslov", naslov);
             command.Parameters.AddWithValue("@autor", autor);
             command.Parameters.AddWithValue("@broj_stranica", broj_stranica);
-            command.Parameters.AddWithValue("@datum_izdavanja",DateTime.Parse(datum));
+            command.Parameters.AddWithValue("@datum_izdavanja", datum);
             command.Parameters.AddWithValue("@kolicina", kolicina);
             command.Parameters.AddWithValue("@opis", opis);
 
@@ -434,26 +439,37 @@ namespace Biblioteka.Controllers
 
             dodaj = "INSERT INTO Jezik(knjiga_id,naziv) values (@knjiga_id,@naziv)";
 
-            command = new MySqlCommand(dodaj, connection);
 
-            command.Parameters.AddWithValue("@knjiga_id", Id);
-            command.Parameters.AddWithValue("@naziv", jezik);
+            string[] jezici = jezik.Split(",");
 
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
+
+            for (int i = 0; i < jezici.Length; i++)
+            {
+                command = new MySqlCommand(dodaj, connection);
+                command.Parameters.AddWithValue("@knjiga_id", Id);
+                command.Parameters.AddWithValue("@naziv", jezici[i]);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+            }
+
 
             dodaj = "INSERT INTO Zanr(knjiga_id,naziv) values (@knjiga_id,@naziv)";
 
-            command = new MySqlCommand(dodaj, connection);
 
-            command.Parameters.AddWithValue("@knjiga_id", Id);
-            command.Parameters.AddWithValue("@naziv", zanr);
+            string[] zanrovi = zanr.Split(",");
 
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
+            for (int i = 0; i < zanrovi.Length; i++)
+            {
+                command = new MySqlCommand(dodaj, connection);
+                command.Parameters.AddWithValue("@knjiga_id", Id);
+                command.Parameters.AddWithValue("@naziv", zanrovi[i]);
 
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
 
             return RedirectToAction("Index");
         }
@@ -524,6 +540,30 @@ namespace Biblioteka.Controllers
                 command.Parameters.AddWithValue("@datum_iznajmljivanja", DateTime.Now);
                 command.Parameters.AddWithValue("@datum_vracanja", DateTime.Now.AddDays(30));
 
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                cmd = "SELECT broj_puta_iznajmljena FROM Knjiga where id=" + ajdi;
+                connection.Open();
+                command = new MySqlCommand(cmd, connection);
+                datareader = command.ExecuteReader();
+                
+                int broj_puta = 0;
+                izlaz = "";
+                if (datareader.Read())
+                {
+                    if (!datareader.IsDBNull(0))
+                    {
+                        izlaz += datareader.GetValue(0);
+                        broj_puta += int.Parse(izlaz);
+                    }
+                }
+                connection.Close();
+                broj_puta++;
+
+                cmd = "UPDATE Knjiga SET broj_puta_iznajmljena="+broj_puta +" WHERE id=" + ajdi;
+                command = new MySqlCommand(cmd, connection);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -532,9 +572,7 @@ namespace Biblioteka.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Knjige/Create
-        [Authorize(Roles = "Administrator, Bibliotekar")]
-        public IActionResult Create()
+        public void InicijalizacijaChoice()
         {
             List<String> jezici = new List<String>
             {
@@ -543,7 +581,27 @@ namespace Biblioteka.Controllers
                 "Njemacki",
                 "Ruski"
             };
+            List<String> zanrovi = new List<String>
+            {
+                "Akcija",
+                "Horror",
+                "Sci-Fi",
+                "Fantazija",
+                "Romansa",
+                "Triler",
+                "Historija",
+                "Misterija"
+            };
+
             ViewBag.Jezici = jezici;
+            ViewBag.Zanrovi = zanrovi;
+        }
+
+        // GET: Knjige/Create
+        [Authorize(Roles = "Administrator, Bibliotekar")]
+        public IActionResult Create()
+        {
+            InicijalizacijaChoice();
             //  KnjigaPage kp = new KnjigaPage();
             return View();
         }
@@ -587,29 +645,215 @@ namespace Biblioteka.Controllers
             {
                 return NotFound();
             }
-            return View(knjiga);
+            InicijalizacijaChoice();
+
+            KnjigaPage k = new KnjigaPage();
+
+            k.id = knjiga.id;
+            k.autor = knjiga.autor;
+            k.broj_stranica = knjiga.broj_stranica;
+            k.naslov = knjiga.naslov;
+            k.opis = knjiga.opis;
+            k.kolicina = knjiga.kolicina;
+            k.datum_izdavanja = knjiga.datum_izdavanja;
+            ajdi = k.id;
+
+
+            var str = "select naziv from Jezik where knjiga_id = '" + knjiga.id + "'";
+            // var str = "select naziv from Jezik where knjiga_id = @id";
+
+            var str1 = "SELECT naziv from Zanr where knjiga_id=" + k.id;
+            var str2 = "SELECT komentar from Komentar where knjiga_id=" + k.id;
+            var vratiOcjenu = "SELECT ocjena FROM Ocjena where id=" + k.id;
+
+            // var idParamtear = new SqlParameter("@id", k.id);
+            //var jezici = _context.Jezik.FromSql("SELECT naziv from Jezik where id = @id", idParamtear);
+            //k.jezici = jezici;
+
+            k.jezici = vratiListu(str);
+            k.zanrovi = vratiListu(str1);
+            k.komentari = vratiListu(str2);
+            var mapa = VratiOcjenu();
+            double ocjena = 0;
+
+            foreach (KeyValuePair<double, int> kvp in mapa)
+            {
+                ocjena = kvp.Key;
+
+            }
+            k.ocjena = Math.Round(ocjena, 2);             // Zaokruzeno na dvije decimale
+
+
+            return View(k);
+
+          //  return View(knjiga);
         }
 
         // POST: Knjige/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [Authorize(Roles = "Administrator, Bibliotekar")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,naslov,autor,broj_stranica,datum_izdavanja,kolicina,opis")] Knjiga knjiga)
+        public async Task<IActionResult> EditKnjiga(IFormCollection formCollection)
         {
-            if (id != knjiga.id)
-            {
-                return NotFound();
-            }
 
+            var knjiga = await _context.Knjiga.FindAsync(ajdi);
             if (ModelState.IsValid)
             {
+                //  var knjiga = await _context.Knjiga.FindAsync(ajdi);
+
                 try
                 {
-                    _context.Update(knjiga);
-                    await _context.SaveChangesAsync();
+                    string noviNaziv = "UPDATE Knjiga SET naslov= '" + formCollection["Naziv"] + "'" + "WHERE id=" + knjiga.id;
+                    string noviAutor = "UPDATE Knjiga SET autor= '" + formCollection["Autor"] + "'" + "WHERE id=" + knjiga.id;
+                    string noveStranice = "UPDATE Knjiga SET broj_stranica= '" + formCollection["broj_stranica"] + "'" + "WHERE id=" + knjiga.id;
+                    string noviDatum = "UPDATE Knjiga SET kolicina=  '" + formCollection["Kolicina"] + "'" + "WHERE id=" + knjiga.id;
+                    string novaKolicina = "UPDATE Knjiga SET opis= '" + formCollection["Opis"] + "'" + "WHERE id=" + knjiga.id;
+                    string noviOpis = "UPDATE Knjiga SET datum_izdavanja= '" + formCollection["datum"] + "'" + "WHERE id=" + knjiga.id;
+
+                    MySqlConnection connection = new MySqlConnection(_connectionString);
+
+                    MySqlCommand command = new MySqlCommand(noviNaziv, connection);
+
+                    if (!formCollection["Naziv"].Equals(knjiga.naslov))
+                    {
+                        command.Parameters.AddWithValue("@naslov", formCollection["Naziv"]);
+                        command.Parameters.AddWithValue("@id", knjiga.id);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+
+                    }
+
+                    if (!formCollection["Autor"].Equals(knjiga.autor))
+                    {
+
+                        command = new MySqlCommand(noviAutor, connection);
+
+                        command.Parameters.AddWithValue("@autor", formCollection["Autor"]);
+                        command.Parameters.AddWithValue("@id", knjiga.id);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+
+                    }
+
+                    if (!formCollection["broj_stranica"].Equals(knjiga.broj_stranica))
+                    {
+
+                        command = new MySqlCommand(noveStranice, connection);
+
+                        command.Parameters.AddWithValue("@broj_stranica", formCollection["broj_stranica"]);
+                        command.Parameters.AddWithValue("@id", knjiga.id);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+
+                    if (!formCollection["datum"].Equals(knjiga.datum_izdavanja))
+                    {
+
+                        command = new MySqlCommand(noviDatum, connection);
+
+                        command.Parameters.AddWithValue("@datum_izdavanja", formCollection["datum"]);
+                        command.Parameters.AddWithValue("@id", knjiga.id);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+
+                    }
+
+                    if (!formCollection["kolicina"].Equals(knjiga.kolicina))
+                    {
+
+                        command = new MySqlCommand(novaKolicina, connection);
+
+                        command.Parameters.AddWithValue("@kolicina", formCollection["Kolicina"]);
+                        command.Parameters.AddWithValue("@id", knjiga.id);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+
+                    if (!formCollection["Opis"].Equals(knjiga.opis))
+                    {
+
+                        command = new MySqlCommand(noviOpis, connection);
+
+                        command.Parameters.AddWithValue("@opis", formCollection["Opis"]);
+                        command.Parameters.AddWithValue("@id", knjiga.id);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+
+                    string zanr = formCollection["Zanr"];
+                    string jezik = formCollection["jezik"];
+
+
+                    if (zanr != null)
+                    {
+                        string[] zanrovi = zanr.Split(",");
+
+                        string brisiSve = "DELETE FROM Zanr";
+                        command = new MySqlCommand(brisiSve, connection);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+
+                        for (int i = 0; i < zanrovi.Length; i++)
+                        {
+                            string noviZanr = "INSERT INTO Zanr(knjiga_id,naziv) VALUES(@knjiga_id,@naziv)";
+
+                            command = new MySqlCommand(noviZanr, connection);
+                            command.Parameters.AddWithValue("@knjiga_id", knjiga.id);
+                            command.Parameters.AddWithValue("@naziv", zanrovi[i]);
+
+                            connection.Open();
+                            command.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                    }
+
+                    if (jezik != null)
+                    {
+                        string[] jezici = jezik.Split(",");
+
+                        System.Diagnostics.Debug.WriteLine("jezik" + jezici.Length);
+
+                        string brisiSve = "DELETE FROM Jezik";
+                        command = new MySqlCommand(brisiSve, connection);
+               
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+
+                        for (int i = 0; i < jezici.Length; i++)
+                        {
+                            string noviJezik = "INSERT INTO Jezik(knjiga_id,naziv) VALUES(@knjiga_id,@naziv)";
+                            System.Diagnostics.Debug.WriteLine(noviJezik + "\n");
+
+                            command = new MySqlCommand(noviJezik, connection);
+                            command.Parameters.AddWithValue("@knjiga_id", knjiga.id);
+                            command.Parameters.AddWithValue("@naziv", jezici[i]);
+
+                            connection.Open();
+                            command.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -623,6 +867,11 @@ namespace Biblioteka.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return NotFound();
+
             }
             return View(knjiga);
         }
@@ -654,6 +903,38 @@ namespace Biblioteka.Controllers
         {
             var knjiga = await _context.Knjiga.FindAsync(id);
             _context.Knjiga.Remove(knjiga);
+
+            var brisiKom = "DELETE FROM Komentar where knjiga_id=" + knjiga.id;
+            var brisiOcj = "DELETE FROM Ocjena where id=" + knjiga.id;
+            var brisiZanr = "DELETE FROM Zanr where knjiga_id=" + knjiga.id;
+            var brisiJez = "DELETE FROM Jezik where knjiga_id=" + knjiga.id;
+
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+
+            MySqlCommand command = new MySqlCommand(brisiKom, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            command = new MySqlCommand(brisiOcj, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            command = new MySqlCommand(brisiZanr, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            command = new MySqlCommand(brisiJez, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "6gmy780AymkLkVpsboF0ZRLuvHYJ3C+EkI3qDBfyMOXUESFuWyHiCbUmgvesNDDpmCVAHXzFPN3xArZdEPnzVQ==",
+  "dgSpecHash": "jWVXdx4XRPC6T/lZeuRK64B3Rznytlk4D1YS8TEyy4kt6j9z80i48LOfrX84uBEkEFkeDSH9VUwftd87KDq+BA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Kerim-PC\\Desktop\\Grupa4-Biblioteka\\Biblioteka\\Biblioteka\\Biblioteka.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kerim-PC\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Kerim-PC\\.nuget\\packages\\google.protobuf\\3.11.4\\google.protobuf.3.11.4.nupkg.sha512",
+    "C:\\Users\\Kerim-PC\\.nuget\\packages\\jquery\\1.12.4\\jquery.1.12.4.nupkg.sha512",
+    "C:\\Users\\Kerim-PC\\.nuget\\packages\\jquery.ui.combined\\1.12.1\\jquery.ui.combined.1.12.1.nupkg.sha512",
     "C:\\Users\\Kerim-PC\\.nuget\\packages\\k4os.compression.lz4\\1.1.11\\k4os.compression.lz4.1.1.11.nupkg.sha512",
     "C:\\Users\\Kerim-PC\\.nuget\\packages\\k4os.compression.lz4.streams\\1.1.11\\k4os.compression.lz4.streams.1.1.11.nupkg.sha512",
     "C:\\Users\\Kerim-PC\\.nuget\\packages\\k4os.hash.xxhash\\1.0.6\\k4os.hash.xxhash.1.0.6.nupkg.sha512",

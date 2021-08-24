@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biblioteka.Migrations
 {
     [DbContext(typeof(BibliotekaContext))]
-    [Migration("20210702224635_migracija")]
+    [Migration("20210824093619_migracija")]
     partial class migracija
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,6 +114,9 @@ namespace Biblioteka.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("broj_puta_iznajmljena")
+                        .HasColumnType("int");
+
                     b.Property<int>("broj_stranica")
                         .HasColumnType("int");
 
@@ -126,6 +129,9 @@ namespace Biblioteka.Migrations
                     b.Property<string>("naslov")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("ocjena")
+                        .HasColumnType("double");
 
                     b.Property<string>("opis")
                         .IsRequired()

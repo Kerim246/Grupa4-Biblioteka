@@ -943,5 +943,50 @@ namespace Biblioteka.Controllers
         {
             return _context.Knjiga.Any(e => e.id == id);
         }
+
+        public async Task<IActionResult> PrikazIznajmljenih()
+        {
+            var UserName = _userService.getUserId();
+
+            var knjigeDatogUsera = "SELECT knjiga_id FROM IznajmljeneKnjige WHERE korisnik_id = '" + UserName + "'";
+
+            MySqlConnection connection = new MySqlConnection(_connectionString);
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(knjigeDatogUsera, connection);
+            // command.Parameters["@id"].Value = id;
+
+            MySqlDataReader datareader = command.ExecuteReader();
+
+            List<string> lista = new List<string>();
+            string izlaz = "";
+
+            while (datareader.Read())
+            {
+                izlaz = izlaz + datareader.GetValue(0) + ",";
+            }
+            connection.Close();
+            //  IQueryable<Knjiga> knjige = Enumerable.Empty<Knjiga>().AsQueryable();
+
+            var knjige = from k in _context.Knjiga select k;
+
+            if (izlaz != "")
+            {
+                string[] listaStr = izlaz.Split(",");
+                List<String> list = new List<String>(listaStr);
+                List<int> l = new List<int>();
+
+                l = list.Select(s => Int32.TryParse(s, out int n) ? n : (int?)null).Where(n => n.HasValue).Select(n => n.Value).ToList();
+
+                knjige = knjige.Where(item1 => l.Any(item2 => item1.id == item2));
+
+
+                return View(await knjige.ToListAsync());
+            }
+            else
+            {
+                knjige = knjige.Where(knjiga1 => knjiga1.id == -1);
+                return View(await knjige.ToListAsync());
+            }
+        }
     }
 }

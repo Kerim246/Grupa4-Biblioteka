@@ -727,3 +727,4 @@ C:\Users\Kerim-PC\Desktop\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netc
 C:\Users\Kerim-PC\Desktop\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.pdb
 C:\Users\Kerim-PC\Desktop\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.genruntimeconfig.cache
 C:\Users\Kerim-PC\Desktop\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.csproj.AssemblyReference.cache
+C:\Users\Kerim-PC\Desktop\Grupa4-Biblioteka\Biblioteka\Biblioteka\obj\Debug\netcoreapp3.1\Razor\Views\Knjige\PrikazIznajmljenih.cshtml.g.cs

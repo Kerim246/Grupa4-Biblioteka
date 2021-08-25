@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Biblioteka.Models.Knjiga>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.naslov)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.autor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.broj_stranica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.datum_izdavanja)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.kolicina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.opis)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.naslov)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.autor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.broj_stranica)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.datum_izdavanja)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.kolicina)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.opis)
+                </td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.id">Details</a>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

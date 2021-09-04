@@ -15,5 +15,10 @@ namespace Biblioteka.Models
 
         [Required]
         public double ocjena { get; set; }
+
+        [ForeignKey("Korisnik")]
+        [Required]
+
+        public int korisnik_id { get; set; }
     }
 }

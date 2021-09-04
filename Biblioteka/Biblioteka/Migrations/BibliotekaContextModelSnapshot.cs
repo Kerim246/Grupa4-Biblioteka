@@ -185,6 +185,9 @@ namespace Biblioteka.Migrations
                     b.Property<int>("id")
                         .HasColumnType("int");
 
+                    b.Property<int>("korisnik_id")
+                        .HasColumnType("int");
+
                     b.Property<double>("ocjena")
                         .HasColumnType("double");
 

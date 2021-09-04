@@ -180,7 +180,8 @@ namespace Biblioteka.Migrations
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false),
-                    ocjena = table.Column<double>(nullable: false)
+                    ocjena = table.Column<double>(nullable: false),
+                    korisnik_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

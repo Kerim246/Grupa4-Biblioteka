@@ -21,7 +21,7 @@ namespace Biblioteka.Controllers
     public class KnjigeController : Controller
     {
         private readonly BibliotekaContext _context;
-        private string _connectionString = @"Server=sql4.freesqldatabase.com;Port=3306;Database=sql4432543;User=sql4432543;Password=nvTPWA14cN;";
+        private string _connectionString = @"Server=sql11.freesqldatabase.com;Port=3306;Database=sql11434554;User=sql11434554;Password=deBfDUpu6G;";
         public static int ajdi;
         private readonly IUserService _userService;
         private static DateTime date;
@@ -393,22 +393,42 @@ namespace Biblioteka.Controllers
 
         public ActionResult RegistrujKnjigu(IFormCollection formCollection)
         {
-            string naslov = Request.Form["Naziv"];
-            string autor = Request.Form["Autor"];
+            string naslov = Request.Form["naslov"];
+            string autor = Request.Form["autor"];
             string zanr = Request.Form["Zanr"];
-            string opis = Request.Form["Opis"];
+            string opis = Request.Form["opis"];
             string kolicina = Request.Form["Kolicina"];
             string broj_stranica = Request.Form["broj_stranica"];
             string jezik = Request.Form["Jezik"];
 
-            string datum = Request.Form["datum"];
+            string datum = Request.Form["datum_izdavanja"];
 
-            var str = "SELECT Max(id)+1 FROM Knjiga";
+            var str = "SELECT naslov FROM Knjiga";
 
             MySqlConnection connection = new MySqlConnection(_connectionString);
             connection.Open();
             MySqlCommand command = new MySqlCommand(str, connection);
             MySqlDataReader datareader = command.ExecuteReader();
+            List<string> nazivi = new List<string>();
+
+            while (datareader.Read())
+            {
+                nazivi.Add(datareader.GetValue(0) + "\n");
+            }
+            connection.Close();
+            foreach(var n in nazivi)
+            {
+                if (n.Equals(naslov))
+                {
+                    TempData["Message"] = "Vec postoji knjiga sa datim imenom";
+                    return RedirectToAction("Greska");
+                }
+            }
+
+            connection.Open();
+            str = "SELECT Max(id)+1 FROM Knjiga";
+            command = new MySqlCommand(str, connection);
+            datareader = command.ExecuteReader();
             int Id=1;
             String izlaz = "";
             if (datareader.Read())
@@ -487,87 +507,135 @@ namespace Biblioteka.Controllers
 
             var provjeraValidnosti = "SELECT * FROM IznajmljeneKnjige where Korisnik_id= '" + UserName + "'" + " AND knjiga_id= '" + ajdi + "'";
             var provjeraDaLiPrazno = "SELECT * FROM IznajmljeneKnjige";
+            var provjeraDaLiDostupno = "SELECT kolicina FROM Knjiga where id=" + ajdi;
+
             MySqlConnection connection = new MySqlConnection(_connectionString);
             connection.Open();
-            MySqlCommand command = new MySqlCommand(provjeraDaLiPrazno, connection);
+            MySqlCommand command = new MySqlCommand(provjeraDaLiDostupno, connection);
             MySqlDataReader datareader = command.ExecuteReader();
-            bool prolaz = false;
-            bool prolaz1 = true;
-            MySqlDataReader pomocni = datareader;
+            string output = "";
 
-            if (datareader.Read())        // Provjera da li je prazna tabela, ako jeste provjerava se da li je korisnik vec pozajmio datu knjigu, ako nije odobrava se pozajma
+            int kolicina = 0;
+            if (datareader.Read())
             {
-                connection.Close();
-                connection.Open();
-                command = new MySqlCommand(provjeraValidnosti, connection);
-                datareader = command.ExecuteReader();
-
-                if (datareader.Read())
-                {
-                    prolaz1 = false;
-                    connection.Close();
-                    TempData["Message"] = "Vec ste pozajmili ovu knjigu!";
-
-                    return RedirectToAction("Greska");
-                }
-                else
-                {
-                    prolaz = true;
-                }
+                output += datareader.GetValue(0);
             }
-            if((prolaz && prolaz1) || !pomocni.Read())   // Ako je prazna tabela ili ako je validna pozajma
+            connection.Close();
+            kolicina = int.Parse(output);
+
+            System.Diagnostics.Debug.WriteLine("kolicina " + kolicina);
+            if (kolicina == 0)
             {
-                connection.Close();
+                TempData["Message"] = "Knjiga nije dostupna!";
+                return RedirectToAction("Greska");
+            }
+            else
+            {
                 connection.Open();
-
-                command = new MySqlCommand(dajKorisnikId, connection);
-
-                 datareader = command.ExecuteReader();
-
-                List<String> lista = new List<String>();
-                string izlaz = "";
-                while (datareader.Read())
-                {
-                    izlaz = izlaz + datareader.GetValue(0);
-                }
-                connection.Close();
-
-
-                command = new MySqlCommand(cmd, connection);
-
-                command.Parameters.AddWithValue("@Knjiga_id", ajdi);
-                command.Parameters.AddWithValue("@korisnik_id", izlaz);
-                command.Parameters.AddWithValue("@datum_iznajmljivanja", DateTime.Now);
-                command.Parameters.AddWithValue("@datum_vracanja", DateTime.Now.AddDays(30));
-
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-
-                cmd = "SELECT broj_puta_iznajmljena FROM Knjiga where id=" + ajdi;
-                connection.Open();
-                command = new MySqlCommand(cmd, connection);
+                command = new MySqlCommand(provjeraDaLiPrazno, connection);
                 datareader = command.ExecuteReader();
-                
-                int broj_puta = 0;
-                izlaz = "";
-                if (datareader.Read())
+
+                bool prolaz = false;
+                bool prolaz1 = true;
+                MySqlDataReader pomocni = datareader;
+
+                if (datareader.Read())        // Provjera da li je prazna tabela, ako jeste provjerava se da li je korisnik vec pozajmio datu knjigu, ako nije odobrava se pozajma
                 {
-                    if (!datareader.IsDBNull(0))
+                    connection.Close();
+                    connection.Open();
+                    command = new MySqlCommand(provjeraValidnosti, connection);
+                    datareader = command.ExecuteReader();
+
+                    if (datareader.Read())
                     {
-                        izlaz += datareader.GetValue(0);
-                        broj_puta += int.Parse(izlaz);
+                        prolaz1 = false;
+                        connection.Close();
+                        TempData["Message"] = "Vec ste pozajmili ovu knjigu!";
+
+                        return RedirectToAction("Greska");
+                    }
+                    else
+                    {
+                        prolaz = true;
                     }
                 }
-                connection.Close();
-                broj_puta++;
+                if ((prolaz && prolaz1) || !pomocni.Read())   // Ako je prazna tabela ili ako je validna pozajma
+                {
+                    connection.Close();
+                    connection.Open();
 
-                cmd = "UPDATE Knjiga SET broj_puta_iznajmljena="+broj_puta +" WHERE id=" + ajdi;
-                command = new MySqlCommand(cmd, connection);
+                    command = new MySqlCommand(dajKorisnikId, connection);
 
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
+                    datareader = command.ExecuteReader();
+
+                    List<String> lista = new List<String>();
+                    string izlaz = "";
+                    while (datareader.Read())
+                    {
+                        izlaz = izlaz + datareader.GetValue(0);
+                    }
+                    connection.Close();
+
+
+                    command = new MySqlCommand(cmd, connection);
+
+                    command.Parameters.AddWithValue("@Knjiga_id", ajdi);
+                    command.Parameters.AddWithValue("@korisnik_id", izlaz);
+                    command.Parameters.AddWithValue("@datum_iznajmljivanja", DateTime.Now);
+                    command.Parameters.AddWithValue("@datum_vracanja", DateTime.Now.AddDays(30));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+
+                    cmd = "SELECT broj_puta_iznajmljena FROM Knjiga where id=" + ajdi;
+                    connection.Open();
+                    command = new MySqlCommand(cmd, connection);
+                    datareader = command.ExecuteReader();
+
+                    int broj_puta = 0;
+                    izlaz = "";
+                    if (datareader.Read())
+                    {
+                        if (!datareader.IsDBNull(0))
+                        {
+                            izlaz += datareader.GetValue(0);
+                            broj_puta += int.Parse(izlaz);
+                        }
+                    }
+                    connection.Close();
+                    broj_puta++;
+
+                    cmd = "UPDATE Knjiga SET broj_puta_iznajmljena=" + broj_puta + " WHERE id=" + ajdi;
+                    command = new MySqlCommand(cmd, connection);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+
+                    cmd = "SELECT kolicina FROM Knjiga where id=" + ajdi;
+                    connection.Open();
+                    command = new MySqlCommand(cmd, connection);
+                    datareader = command.ExecuteReader();
+
+                    int novaKolicina = 0;
+                    izlaz = "";
+                    if (datareader.Read())
+                    {
+                        izlaz += datareader.GetValue(0);
+                    }
+                    connection.Close();
+
+                    novaKolicina = int.Parse(izlaz);
+                    --novaKolicina;
+
+                    cmd = "UPDATE Knjiga SET kolicina=" + novaKolicina + " WHERE id=" + ajdi;     // Smanjenje kolicine za 1 nakon pozajme
+                    command = new MySqlCommand(cmd, connection);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
             }
             return RedirectToAction("Index");
         }

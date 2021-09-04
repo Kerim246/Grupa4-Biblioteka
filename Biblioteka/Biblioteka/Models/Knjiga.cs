@@ -20,25 +20,33 @@ namespace Biblioteka.Models
         [Key]
         [Required]
         public int id { get; set; }
+
         [Required]
+        [RegularExpression(@"[a-zA-Z]*$", ErrorMessage ="Unesite ispravan naziv!")]
         public string naslov { get; set; }
+
         [Required]
+        [RegularExpression(@"[a-zA-Z]*$",ErrorMessage ="Unesite ispravno ime autora")]
         public string autor { get; set; }
+
         [Required]
         [DisplayName("Broj stranica")]
+        [Range(5,10000,ErrorMessage = "Unesite validan broj stranica!")]
         public int broj_stranica { get; set; }
 
         [Required, DataType(DataType.DateTime)]
         [DisplayName("Datum izdavanja")]
-
+        [ValidacijaDatuma]
+        [DateRange("01/01/1900")]
         public DateTime datum_izdavanja { get; set; }
 
         [Required]
         [DisplayName("Kolicina")]
+        [Range(5, 10000, ErrorMessage = "Unesite validan broj kolicine!")]
 
         public int kolicina { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Unesite opis knjige!")]
         [DisplayName("Opis:")]
         public string opis { get; set; }
 

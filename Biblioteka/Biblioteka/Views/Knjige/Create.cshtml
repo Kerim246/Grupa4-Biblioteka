@@ -20,12 +20,12 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="naslov" class="control-label"></label>
-                    @Html.TextBox("Naziv", null, new { @class = "form-control" })
+                    @Html.TextBox("naslov", null, new { @class = "form-control",@type="text" })
                     <span asp-validation-for="naslov" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="autor" class="control-label"></label>
-                    @Html.TextBox("Autor", null, new { @class = "form-control" })
+                    @Html.TextBox("autor", null, new { @class = "form-control" })
                     <span asp-validation-for="autor" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -35,17 +35,17 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="datum_izdavanja" class="control-label"></label>
-                    @Html.TextBox("datum", null, new { @class = "form-control", placeholder = "YYYY/MM/DD" })
+                    @Html.TextBox("datum_izdavanja", null, new { @class = "form-control", @type = "date" })
                     <span asp-validation-for="datum_izdavanja" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="kolicina" class="control-label"></label>
-                    @Html.TextBox("Kolicina", null, new { @class = "form-control", @type = "number", placeholder = "0" })
+                    @Html.TextBox("kolicina", null, new { @class = "form-control", @type = "number", placeholder = "0" })
                     <span asp-validation-for="kolicina" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="opis" class="control-label"></label>
-                    @Html.TextBox("Opis", null, new { @class = "form-control" })
+                    @Html.TextArea("opis", "", new { @class = "form-control" })
                     <span asp-validation-for="opis" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -56,7 +56,7 @@
                             <option value="@item">@item</option>
                         }
                     </select>
-                    <span class="text-danger"></span>
+                    <span  class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Zanr</label>
@@ -66,7 +66,7 @@
                             <option value="@item">@item</option>
                         }
                     </select>
-                    <span class="text-danger"></span>
+                    <span  class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />

@@ -10,19 +10,11 @@ namespace Biblioteka.Models
     public class Korisnik
     {
 
-        [ForeignKey("Osoba")]
         [Required]
-        public int korisnik_id { get; set; }
+        [Key]
+        public int id;
 
-        [Required]
-        public long broj_ziror_acuna { get; set; }
-
-        [ForeignKey("BibliotekaM")]
-        [Required]
-        public int biblioteka_id { get; set; }
-
-        [Required, DataType(DataType.DateTime)]
-        public DateTime datum_isteka_clanarine { get; set; }
+        public string email { get; set; }
 
 
     } 

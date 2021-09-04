@@ -27,6 +27,7 @@ namespace Biblioteka.Models
 
         public Knjiga knjiga { get; set; }
         [DisplayName("Jezici: ")]
+        [Required(ErrorMessage = "Odaberite jezik knjige!")]
         public List<String> jezici { get; set; }
 
         [DisplayName("Zanrovi: ")]

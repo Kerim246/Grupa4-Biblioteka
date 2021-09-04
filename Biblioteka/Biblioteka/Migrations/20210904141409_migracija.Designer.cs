@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biblioteka.Migrations
 {
     [DbContext(typeof(BibliotekaContext))]
-    [Migration("20210824093619_migracija")]
+    [Migration("20210904141409_migracija")]
     partial class migracija
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,6 +185,9 @@ namespace Biblioteka.Migrations
             modelBuilder.Entity("Biblioteka.Models.Ocjena", b =>
                 {
                     b.Property<int>("id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("korisnik_id")
                         .HasColumnType("int");
 
                     b.Property<double>("ocjena")
